@@ -46,9 +46,16 @@ public class CalCol : MonoBehaviour
         if (internetPaid == true) internet = 0f;
 
         float total = rent + food + utilites + carInsurance + gas + internet;
-        Debug.Log(total);
+        //Debug.Log(total);
 
         return total;
+    }
+
+    public float CalChecking(Player player)
+    {
+
+        float checking = player.PayCheck - rent - utilites - carInsurance - gas - internet;      
+        return checking;
     }
 
     public void UpdateVar(float newRent, float newFood, float newUtilites, float newCarInsurance, float newGas,  float newInternet)

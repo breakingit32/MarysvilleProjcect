@@ -36,7 +36,15 @@ public class Player : MonoBehaviour
 
     public void SetBools()
     {
-        
+        Savings = 500;
+        PayCheck = 2000;
+        hasCar = true;
+        hasCarInsurance = true;
+        hasInternet = true;
+        hasFood = true;
+        hasHome = true;
+        hasGas = true;
+
     }
     public void UpdateBools()
     {

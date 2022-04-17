@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
+using UnityEngine.EventSystems;
 public class Month2 : MonoBehaviour
 {
 
@@ -30,14 +32,14 @@ public class Month2 : MonoBehaviour
     public static Month2 M;
     public CalCol month2;
     public float billss;
-
+    public bool buttonPressed;
     // Start is called before the first frame update
     public void Start()
     {
         SetVar();
-        
+        manager.playerTracker = 0;
         month2.UpdateVar(rent, food, utilites, carInsurance, gas, internet);
-       
+        Debug.Log(manager.playerTracker);
     }
     public void SetVar()
     {
@@ -56,8 +58,8 @@ public class Month2 : MonoBehaviour
         Button rent = Rent.GetComponent<Button>();
         Debug.Log(rent);
         rent.onClick.AddListener(PaidRent);
-        Button finish = Finish.GetComponent<Button>();
-        finish.onClick.AddListener(Done);
+        //Button finish = Finish.GetComponent<Button>();
+        //finish.onClick.AddListener(Done);
         Button gas = Gas.GetComponent<Button>();
         gas.onClick.AddListener(PaidGas);
         Button food = Food.GetComponent<Button>();
@@ -69,9 +71,13 @@ public class Month2 : MonoBehaviour
         Button internet = Internet.GetComponent<Button>();
         internet.onClick.AddListener(PaidInternet);
     }
+    
+
+    
 
     private void PaidInternet()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - internet;
         month2.internetPaid = true;
         Text text = Internet.GetComponentInChildren<Text>();
         text.text = "paid";
@@ -79,6 +85,7 @@ public class Month2 : MonoBehaviour
 
     private void PaidCarInsurance()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - carInsurance;
         month2.carInsurancePaid = true;
         Text text = CarInsurance.GetComponentInChildren<Text>();
         text.text = "paid";
@@ -86,6 +93,7 @@ public class Month2 : MonoBehaviour
 
     private void PaidUtilities()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - utilites;
         month2.utilitesPaid = true;
         Text text = Utilites.GetComponentInChildren<Text>();
         text.text = "paid";
@@ -93,6 +101,7 @@ public class Month2 : MonoBehaviour
 
     private void PaidFood()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - food;
         month2.foodPaid = true;
         Text text = Food.GetComponentInChildren<Text>();
         text.text = "paid";
@@ -101,6 +110,7 @@ public class Month2 : MonoBehaviour
 
     private void PaidGas()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - gas;
         month2.gaspaid = true;
         Text text = Gas.GetComponentInChildren<Text>();
         text.text = "paid";
@@ -115,15 +125,18 @@ public class Month2 : MonoBehaviour
 
     public void Done()
     {
+        manager.playerTracker = manager.playerTracker + 1;
+        if (manager.playerTracker > 4) manager.playerTracker = 0;
         //month2.Cal();SSS
         reset();
         //SceneManager.LoadScene(manager.scenes[manager.playerTracker]);
-        manager.playerTracker++;
+        
         Debug.Log(manager.playerTracker);
     }
 
     public void PaidRent()
     {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - rent;
         month2.rentPaid = true;
         Text text = Rent.GetComponentInChildren<Text>();
         text.text = "paid";
