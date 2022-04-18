@@ -12,17 +12,8 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        
-
-        
-
         players[0].SetBools();
-        players[0].PayCheck = 1234;
-        Debug.Log(players[0].PayCheck);
-
         players[1].SetBools();
-        Debug.Log(players[1].PayCheck);
         players[2].SetBools();
         players[3].SetBools();
         players[4].SetBools();
