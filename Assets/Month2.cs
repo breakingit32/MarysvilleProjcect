@@ -21,12 +21,6 @@ public class Month2 : MonoBehaviour
     public static bool carInsurancePaid = false;
     public static bool gaspaid = false;
     public static bool internetPaid = false;
-    public static bool rentPaidButtonClick = false;
-    public static bool foodPaidButtonClick = false;
-    public static bool utilitesPaidButtonClick = false;
-    public static bool carInsurancePaidButtonClick = false;
-    public static bool gaspaidButtonClick = false;
-    public static bool internetPaidButtonClick = false;
     public Manager manager;
     public Button Rent;
     public Button Finish;
@@ -40,37 +34,23 @@ public class Month2 : MonoBehaviour
     public CalCol month2;
     public float billss;
     public bool buttonPressed;
-    public float checkBal;
-    public bool resetBillVals;
     
     // Start is called before the first frame update
     public void Start()
     {
-        resetBillVals = false;
         SetVar();
         manager.playerTracker = 0;
-        month2.UpdateVar(month2.rent, month2.food, month2.utilites, month2.carInsurance, month2.gas, month2.internet);
+        month2.UpdateVar(rent, food, utilites, carInsurance, gas, internet);
         Debug.Log(manager.playerTracker);
     }
-    //public void SetStartVar()
-    //{
-    //    rent = 1500;
-    //    food = 100;
-    //    utilites = 50;
-    //    carInsurance = 130;
-    //    gas = 1500;
-    //    internet = 700;
-    //    Debug.Log(food);
-    //    ListenForButton();
-    //}
     public void SetVar()
     {
-        month2.rent = 1500;
-        month2.food = 100;
-        month2.utilites = 50;
-        month2.carInsurance = 130;
-        month2.gas = 1500;
-        month2.internet = 700;
+        rent = 1500;
+        food = 100;
+        utilites = 50;
+        carInsurance = 130;
+        gas = 150;
+        internet = 700;
         Debug.Log(food);
         ListenForButton();
     }
@@ -79,219 +59,170 @@ public class Month2 : MonoBehaviour
     {
         Button rent = Rent.GetComponent<Button>();
         Debug.Log(rent);
-        rent.onClick.AddListener(PaidRent2);
-        Button finish = Finish.GetComponent<Button>();
-        finish.onClick.AddListener(Done);
+        rent.onClick.AddListener(PaidRent);
+        //Button finish = Finish.GetComponent<Button>();
+        //finish.onClick.AddListener(Done);
         Button gas = Gas.GetComponent<Button>();
-        gas.onClick.AddListener(PaidGas2);
+        gas.onClick.AddListener(PaidGas);
         Button food = Food.GetComponent<Button>();
-        food.onClick.AddListener(PaidFood2);
+        food.onClick.AddListener(PaidFood);
         Button utilites = Utilites.GetComponent<Button>();
-        utilites.onClick.AddListener(PaidUtilities2);
+        utilites.onClick.AddListener(PaidUtilities);
         Button carInsurance = CarInsurance.GetComponent<Button>();
-        carInsurance.onClick.AddListener(PaidCarInsurance2);
+        carInsurance.onClick.AddListener(PaidCarInsurance);
         Button internet = Internet.GetComponent<Button>();
-        internet.onClick.AddListener(PaidInternet2);
+        internet.onClick.AddListener(PaidInternet);
     }
+    
 
+    
 
-    public void PaidInternet2()
+    private void PaidInternet()
     {
-        if (internetPaidButtonClick == false)
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - internet;
+
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
         {
+            month2.internetPaid = true;
+            Text text = Internet.GetComponentInChildren<Text>();
+            text.text = "paid";
+        }
+        else if (month2.internetPaid == true)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + internet;
             Warning.text = "";
-            internetPaidButtonClick = true;
-            float checkBal = month2.CheckBal(manager.players[manager.playerTracker], internet);
-            Debug.Log(checkBal + "internet");
-            if (checkBal == 0)
-            {
-                month2.internetPaid = true;
-                Text text = Internet.GetComponentInChildren<Text>();
-                text.text = "paid";
-
-            }
-
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + internet;
-                StartCoroutine(Timer());
-            }
             return;
         }
-        if(internetPaidButtonClick == true && checkBal == 1)
+        else if (month2.internetPaid == false)
         {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck+internet;
             StartCoroutine(Timer());
         }
-
         
-
         
-
     }
 
-    
-    public void PaidCarInsurance2()
+    private void PaidCarInsurance()
     {
-        if (carInsurancePaidButtonClick == false)
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - carInsurance;
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
         {
+            month2.carInsurancePaid = true;
+            Text text = CarInsurance.GetComponentInChildren<Text>();
+            text.text = "paid";
+        }
+        else if (month2.carInsurancePaid == true)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + carInsurance;
             Warning.text = "";
-            carInsurancePaidButtonClick = true;
-            float checkBal = month2.CheckBal(manager.players[manager.playerTracker], carInsurance);
-            if (checkBal == 0)
-            {
-                month2.carInsurancePaid = true;
-                Text text = CarInsurance.GetComponentInChildren<Text>();
-                text.text = "paid";
-
-            }
-
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + carInsurance;
-                StartCoroutine(Timer());
-            }
             return;
         }
-        if(carInsurancePaidButtonClick == true && checkBal == 1)
+        else if (month2.carInsurancePaid == false)
         {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + carInsurance;
             StartCoroutine(Timer());
         }
 
-
-
     }
-    
 
-    public void PaidUtilities2()
+    private void PaidUtilities()
     {
-        if (utilitesPaidButtonClick == false)
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - utilites;
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
         {
-            Warning.text = "";
-            utilitesPaidButtonClick = true;
-            float checkBal = month2.CheckBal(manager.players[manager.playerTracker], utilites);
-            if (checkBal == 0)
-            {
-                month2.utilitesPaid = true;
-                Text text = Utilites.GetComponentInChildren<Text>();
-                text.text = "paid";
-
-            }
-
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + utilites;
-                StartCoroutine(Timer());
-            }
-
-            return;
-
+            month2.utilitesPaid = true;
+            Text text = Utilites.GetComponentInChildren<Text>();
+            text.text = "paid";
         }
-        if(utilitesPaidButtonClick == true && checkBal == 1)
+        else if (month2.utilitesPaid == true)
         {
-            StartCoroutine(Timer());
-        }
-
-
-    }
-    
-    public void PaidFood2()
-    {
-        if (foodPaidButtonClick == false)
-        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + utilites;
             Warning.text = "";
-            foodPaidButtonClick = true;
-            float checkBal = month2.CheckBal(manager.players[manager.playerTracker], food);
-            if (checkBal == 0)
-            {
-                month2.foodPaid = true;
-                Text text = Food.GetComponentInChildren<Text>();
-                text.text = "paid";
-
-            }
-           
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + food;
-                StartCoroutine(Timer());
-            }
             return;
         }
-
-        if(foodPaidButtonClick == true && checkBal == 1)
+        else if (month2.utilitesPaid == false)
         {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + utilites;
             StartCoroutine(Timer());
         }
-
-
+        
+        
     }
-    
-    public void PaidGas2()
-    {
-        if (gaspaidButtonClick == false)
-        {
-            gaspaidButtonClick = true;
-            Warning.text = "";
-            float checkBal = month2.CheckBal(manager.players[manager.playerTracker], gas);
-            Debug.Log(checkBal + "gas");
-            if (checkBal == 0)
-            {
-                month2.gaspaid = true;
-                Text text = Gas.GetComponentInChildren<Text>();
-                text.text = "paid";
 
-            }
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + gas;
-                StartCoroutine(Timer());
-            }
+    private void PaidFood()
+    {
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - food;
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
+        {
+            month2.foodPaid = true;
+            Text text = Food.GetComponentInChildren<Text>();
+            text.text = "paid";
+        }
+        else if (month2.foodPaid == true)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + food;
+            Warning.text = "";
             return;
         }
-
-
-        if(gaspaidButtonClick == true && checkBal == 1)
+        else if (month2.foodPaid == false)
         {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + food;
             StartCoroutine(Timer());
         }
-
+        
+        
     }
-    public void PaidRent2()
+
+
+    private void PaidGas()
     {
-        if (rentPaidButtonClick == false)
+        
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
         {
+            month2.gaspaid = true;
+            Text text = Gas.GetComponentInChildren<Text>();
+            text.text = "paid";
+        }
+        else if(month2.gaspaid == true)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + gas;
             Warning.text = "";
-            rentPaidButtonClick = true;
-            checkBal = month2.CheckBal(manager.players[manager.playerTracker], rent);
-            Debug.Log(checkBal + "L:");
-            if (checkBal == 0)
-            {
-                month2.rentPaid = true;
-                Text text = Rent.GetComponentInChildren<Text>();
-                text.text = "paid";
-
-            }
-            else if (checkBal == 1)
-            {
-                manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + rent;
-                StartCoroutine(Timer());
-            }
-            
-
+            return;
         }
-
-        if (rentPaidButtonClick == true && checkBal == 1)
+        else if (month2.gaspaid == false)
         {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + gas;
             StartCoroutine(Timer());
         }
-
-
+        
+        
     }
-   
-    // Update is called once per frame
-    void Update()
+    public void PaidRent()
     {
-         
-        billss = month2.Cal();
+        manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck - rent;
+        if (month2.CheckBal(manager.players[manager.playerTracker]) == 0)
+        {
+            month2.rentPaid = true;
+            Text text = Rent.GetComponentInChildren<Text>();
+            text.text = "paid";
+        }
+        else if (month2.rentPaid == true)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + rent;
+            Warning.text = "";
+            return;
+        }
+        else if (month2.rentPaid == false)
+        {
+            manager.players[manager.playerTracker].PayCheck = manager.players[manager.playerTracker].PayCheck + rent;
+            StartCoroutine(Timer());
+        }
+    }
+        // Update is called once per frame
+        void Update()
+    {
+        float bills = month2.Cal();
+        billss = bills;
     }
 
     public void Done()
@@ -300,7 +231,7 @@ public class Month2 : MonoBehaviour
         manager.playerTracker = manager.playerTracker + 1;
         if (manager.playerTracker > 4) manager.playerTracker = 0;
         //month2.Cal();SSS
-        // reset();
+        reset();
         //SceneManager.LoadScene(manager.scenes[manager.playerTracker]);
         
         Debug.Log(manager.playerTracker);
@@ -319,20 +250,6 @@ public class Month2 : MonoBehaviour
         bool utilitesP = month2.utilitesPaid == true ? false : false;
         bool carInsuranceP = month2.carInsurancePaid == true ? false : false;
 
-        rentPaidButtonClick = false;
-        gaspaidButtonClick = false;
-        foodPaidButtonClick = false;
-        carInsurancePaidButtonClick = false;
-        internetPaidButtonClick = false;
-        utilitesPaidButtonClick = false;
-        //resetBillVals = true;
-        //if(resetBillVals == true)
-        //{
-        //    SetVar();
-        //    resetBillVals = false;
-        //}
-
-        
         Text textR = Rent.GetComponentInChildren<Text>();
         if (rentP == false) textR.text = "Rent";
         Text textG = Gas.GetComponentInChildren<Text>();
