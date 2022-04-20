@@ -51,9 +51,9 @@ public class CalCol : MonoBehaviour
         return total;
     }
 
-    public float CheckBal(Player player, float item)
+    public float CheckBal(Player player)
     {
-        player.PayCheck =+ -item;
+        
         if (player.PayCheck <= 0f) {
             
             return 1; //Not enough funds
