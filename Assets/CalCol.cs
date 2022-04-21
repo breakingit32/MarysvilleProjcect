@@ -46,15 +46,15 @@ public class CalCol : MonoBehaviour
         if (internetPaid == true) internet = 0f;
 
         float total = rent + food + utilites + carInsurance + gas + internet;
-        //Debug.Log(total);
+        Debug.Log(total);
 
         return total;
     }
 
-    public float CheckBal(Player player)
+    public float CheckBal(Player player, float item)
     {
-        
-        if (player.PayCheck <= 0f) {
+        player.PayCheck = player.PayCheck - item;
+        if (player.PayCheck >= 0f) {
             
             return 1; //Not enough funds
         }
@@ -66,8 +66,9 @@ public class CalCol : MonoBehaviour
     }
     public float CalChecking(Player player)
     {
+        Cal();
 
-        float checking = player.PayCheck - rent - utilites - carInsurance - gas - internet;      
+        float checking = player.PayCheck - rent - utilites - carInsurance - gas - internet - food;      
         return checking;
     }
 
